@@ -40,7 +40,7 @@ export default function Footer() {
             className="flex items-center gap-4"
           >
             <a
-              href="https://github.com/hamoudalatrac"
+              href="https://github.com/hamoudachekir"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
@@ -48,7 +48,7 @@ export default function Footer() {
               <Github size={20} />
             </a>
             <a
-              href="https://www.linkedin.com/in/hamouda-latrache"
+              href="https://www.linkedin.com/in/hamouda-chekir-5053572b4"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"

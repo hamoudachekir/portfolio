@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Calendar, MapPin } from 'lucide-react';
+import Starfield from './Starfield.jsx';
 
 // IMPORT COMPANY LOGOS (add these images inside /public/logos/)
 import smartLogo from '/logos/smartconseil.png';
@@ -58,6 +59,7 @@ export default function CareerHighlights() {
     <section id="career" className="relative py-32 bg-[#0a0a1f] overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0">
+        <Starfield />
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
       </div>

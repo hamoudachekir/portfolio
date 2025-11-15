@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Mail, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import Earth from './Earth.jsx';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -85,6 +86,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative py-32 bg-[#0a0a1f] overflow-hidden">
+      <Earth />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}

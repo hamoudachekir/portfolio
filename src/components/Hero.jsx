@@ -253,8 +253,8 @@ export default function Hero() {
                           <p><span className="text-purple-400">const</span> <span className="text-blue-300">developer</span> <span className="text-purple-400">=</span> {'{'}</p>
                           <p className="ml-4"><span className="text-emerald-400">name</span>: <span className="text-amber-300">'Hamouda Chekir'</span>,</p>
                           <p className="ml-4"><span className="text-emerald-400">role</span>: <span className="text-amber-300">'Full-Stack & DevOps'</span>,</p>
-                          <p className="ml-4"><span className="text-emerald-400">stack</span>: [<span className="text-sky-400">'React'</span>, <span className="text-sky-400">'Node.js'</span>, <span className="text-sky-400">'Kubernetes'</span>],</p>
-                          <p className="ml-4"><span className="text-emerald-400">location</span>: <span className="text-amber-300">'France'</span></p>
+                          <p className="ml-4"><span className="text-emerald-400">stack</span>: [<span className="text-sky-400">'React'</span>, <span className="text-sky-400">'Node.js'</span>, <span className="text-sky-400">'Laravel'</span>],</p>
+                          <p className="ml-4"><span className="text-emerald-400">location</span>: <span className="text-amber-300">'Tunisia'</span></p>
                           <p>{'}'}</p>
                         </div>
                       </div>

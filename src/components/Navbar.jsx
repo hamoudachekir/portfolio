@@ -60,10 +60,12 @@ export default function Navbar() {
           <motion.a
             href="#home"
             onClick={(e) => handleNavClick(e, '#home')}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, rotate: [0, -2, 2, -2, 0] }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-3"
+            transition={{ duration: 0.3 }}
+            className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
           >
+            &lt;Hamouda /&gt;
           </motion.a>
 
           {/* Desktop Menu */}

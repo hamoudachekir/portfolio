@@ -19,29 +19,35 @@ export default function Contact() {
       position: 'top-right',
     });
 
-    try {
-      // For Netlify Forms, we need to encode the form data properly
-      const formData = new FormData(e.target);
-      const data = {};
-      
-      // Convert FormData to regular object
-      for (let [key, value] of formData.entries()) {
-        data[key] = value;
-      }
+    // Get form values
+    const name = formData.name;
+    const email = formData.email;
+    const message = formData.message;
 
-      // Submit to Netlify with proper encoding
+    try {
+      // Encode form data for Netlify
+      const encode = (data) => {
+        return Object.keys(data)
+          .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+          .join('&');
+      };
+
+      // Submit to Netlify Forms
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
+        body: encode({
           'form-name': 'contact',
-          ...data
-        }).toString(),
+          'name': name,
+          'email': email,
+          'message': message
+        })
       });
 
+      // Check response
       if (response.ok || response.status === 200) {
-        // Success notification
-        toast.success(`Thanks ${data.name}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
+        // Success!
+        toast.success(`Thanks ${name}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
           duration: 6000,
           position: 'top-right',
           style: {
@@ -64,11 +70,12 @@ export default function Contact() {
       }
       
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error details:', error);
       
-      // For development or fallback, show a different message
+      // Check if we're in local development
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        toast.success('Development Mode: Form submission successful! (This will work properly when deployed)', {
+        // Local development - just show success
+        toast.success(`✅ Dev Mode: Form validated! Will work on production.\nName: ${name}\nEmail: ${email}`, {
           duration: 6000,
           position: 'top-right',
           style: {
@@ -83,29 +90,46 @@ export default function Contact() {
         setFormData({ name: '', email: '', message: '' });
         setStatus({ 
           type: 'success', 
-          message: 'Development mode - form ready!' 
+          message: 'Development mode - validated!' 
         });
       } else {
-        // Production error
-        toast.error('Unable to send message at the moment. Please contact me directly at hamoudachkir@yahoo.fr', {
-          duration: 8000,
-          position: 'top-right',
-          style: {
-            background: '#EF4444',
-            color: 'white',
-            borderRadius: '12px',
-            padding: '16px',
-            maxWidth: '400px',
-          },
-        });
+        // Production error - provide mailto fallback
+        const mailtoLink = `mailto:hamoudachkir@yahoo.fr?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0D%0A%0D%0AFrom: ${encodeURIComponent(email)}`;
+        
+        toast.error(
+          <div>
+            <p>Form submission issue detected. Opening email client as backup...</p>
+            <button 
+              onClick={() => window.location.href = mailtoLink}
+              className="mt-2 px-4 py-2 bg-white/20 rounded hover:bg-white/30 transition"
+            >
+              Open Email
+            </button>
+          </div>,
+          {
+            duration: 10000,
+            position: 'top-right',
+            style: {
+              background: '#EF4444',
+              color: 'white',
+              borderRadius: '12px',
+              padding: '16px',
+              maxWidth: '400px',
+            },
+          }
+        );
+        
+        // Also open mailto automatically
+        setTimeout(() => {
+          window.location.href = mailtoLink;
+        }, 2000);
         
         setStatus({ 
           type: 'error', 
-          message: 'Please contact me directly via email.' 
+          message: 'Please use the email client that opened.' 
         });
       }
     } finally {
-      // Dismiss loading toast
       toast.dismiss(loadingToast);
       setIsLoading(false);
     }

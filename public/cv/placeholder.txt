@@ -1,0 +1,4 @@
+This is a placeholder file. Please replace this with your actual CV PDF file at:
+public/cv/Hamouda_CV.pdf
+
+The download button in the Hero section will automatically work once you place your CV file here.

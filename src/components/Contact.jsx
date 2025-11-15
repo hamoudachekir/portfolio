@@ -20,17 +20,23 @@ export default function Contact() {
     });
 
     try {
-      // Create FormData from the form
-      const formData = new FormData(e.target);
+      // Check if we're in production (Netlify) or development
+      const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
       
-      // Submit to Netlify
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString(),
-      });
+      if (isProduction) {
+        // Production: Use Netlify Forms
+        const formData = new FormData(e.target);
+        
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString(),
+        });
 
-      if (response.ok) {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         // Success notification
         toast.success(`Thanks ${formData.get('name')}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
           duration: 6000,
@@ -51,7 +57,28 @@ export default function Contact() {
           message: 'Message sent successfully!' 
         });
       } else {
-        throw new Error('Failed to send message');
+        // Development: Simulate form submission
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+        
+        // Success notification for development
+        toast.success(`Development Mode: Message from ${formData.name} would be sent to hamoudachkir@yahoo.fr`, {
+          duration: 6000,
+          position: 'top-right',
+          style: {
+            background: '#10B981',
+            color: 'white',
+            borderRadius: '12px',
+            padding: '16px',
+            maxWidth: '400px',
+          },
+        });
+
+        // Reset form
+        setFormData({ name: '', email: '', message: '' });
+        setStatus({ 
+          type: 'success', 
+          message: 'Message ready to send (Development Mode)' 
+        });
       }
       
     } catch (error) {

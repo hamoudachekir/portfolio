@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://roaring-platypus-26489a.netlify.app/sitemap.xml
+
+# Disallow specific paths
+Disallow: /admin/
+Disallow: /_redirects
+Disallow: /netlify.toml

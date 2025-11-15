@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Github, Linkedin, Mail, ArrowDown, MousePointer2 } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowDown, MousePointer2, Download } from 'lucide-react';
 
 export default function Hero() {
   const mouseX = useMotionValue(0);
@@ -110,6 +110,18 @@ export default function Hero() {
                   Get In Touch
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </a>
+
+              <a
+                href="/cv/Hamouda_CV.pdf"
+                download="Hamouda_Chekir_DevOps_CV.pdf"
+                className="group relative px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg font-semibold text-white overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/50 hover:-translate-y-1"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <Download size={20} />
+                  Download CV
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-green-700 to-emerald-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </a>
 
               <a

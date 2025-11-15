@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 
 export default function Projects() {
   const projects = [
@@ -184,10 +185,10 @@ export default function Projects() {
             >
               <div className="relative h-full bg-[#1a1a3e]/50 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/50 transition-all duration-300">
                 <div className="relative h-48 overflow-hidden">
-                  <img
+                  <OptimizedImage
                     src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    alt={`${project.title} - DevOps Project Screenshot`}
+                    className="w-full h-full transition-transform duration-500 group-hover:scale-110"
                   />
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-60 mix-blend-multiply`}

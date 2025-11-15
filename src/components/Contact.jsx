@@ -20,25 +20,28 @@ export default function Contact() {
     });
 
     try {
-      // Check if we're in production (Netlify) or development
-      const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+      // For Netlify Forms, we need to encode the form data properly
+      const formData = new FormData(e.target);
+      const data = {};
       
-      if (isProduction) {
-        // Production: Use Netlify Forms
-        const formData = new FormData(e.target);
-        
-        const response = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString(),
-        });
+      // Convert FormData to regular object
+      for (let [key, value] of formData.entries()) {
+        data[key] = value;
+      }
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+      // Submit to Netlify with proper encoding
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          'form-name': 'contact',
+          ...data
+        }).toString(),
+      });
 
+      if (response.ok || response.status === 200) {
         // Success notification
-        toast.success(`Thanks ${formData.get('name')}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
+        toast.success(`Thanks ${data.name}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
           duration: 6000,
           position: 'top-right',
           style: {
@@ -57,50 +60,50 @@ export default function Contact() {
           message: 'Message sent successfully!' 
         });
       } else {
-        // Development: Simulate form submission
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-        
-        // Success notification for development
-        toast.success(`Development Mode: Message from ${formData.name} would be sent to hamoudachkir@yahoo.fr`, {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+    } catch (error) {
+      console.error('Error sending message:', error);
+      
+      // For development or fallback, show a different message
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        toast.success('Development Mode: Form submission successful! (This will work properly when deployed)', {
           duration: 6000,
           position: 'top-right',
           style: {
-            background: '#10B981',
+            background: '#F59E0B',
             color: 'white',
             borderRadius: '12px',
             padding: '16px',
             maxWidth: '400px',
           },
         });
-
-        // Reset form
+        
         setFormData({ name: '', email: '', message: '' });
         setStatus({ 
           type: 'success', 
-          message: 'Message ready to send (Development Mode)' 
+          message: 'Development mode - form ready!' 
+        });
+      } else {
+        // Production error
+        toast.error('Unable to send message at the moment. Please contact me directly at hamoudachkir@yahoo.fr', {
+          duration: 8000,
+          position: 'top-right',
+          style: {
+            background: '#EF4444',
+            color: 'white',
+            borderRadius: '12px',
+            padding: '16px',
+            maxWidth: '400px',
+          },
+        });
+        
+        setStatus({ 
+          type: 'error', 
+          message: 'Please contact me directly via email.' 
         });
       }
-      
-    } catch (error) {
-      console.error('Error sending message:', error);
-      
-      // Error notification
-      toast.error('Failed to send message. Please try again or contact me directly at hamoudachkir@yahoo.fr', {
-        duration: 8000,
-        position: 'top-right',
-        style: {
-          background: '#EF4444',
-          color: 'white',
-          borderRadius: '12px',
-          padding: '16px',
-          maxWidth: '400px',
-        },
-      });
-      
-      setStatus({ 
-        type: 'error', 
-        message: 'Failed to send message. Please try again.' 
-      });
     } finally {
       // Dismiss loading toast
       toast.dismiss(loadingToast);
@@ -130,8 +133,15 @@ export default function Contact() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <form name="contact" method="POST" data-netlify="true" onSubmit={handleSubmit} className="p-8 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl space-y-6">
+          <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit} className="p-8 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl space-y-6">
             <input type="hidden" name="form-name" value="contact" />
+            
+            {/* Honeypot field for spam protection */}
+            <div style={{ display: 'none' }}>
+              <label>
+                Don't fill this out if you're human: <input name="bot-field" />
+              </label>
+            </div>
             
             {/* Status message */}
             {status.message && (
@@ -201,8 +211,15 @@ export default function Contact() {
               }`}
             >
               <Send size={20} />
-              {isLoading ? 'Opening Email...' : 'Send Message'}
+              {isLoading ? 'Sending Message...' : 'Send Message'}
             </motion.button>
+            
+            {/* Debug info for development */}
+            {(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (
+              <div className="text-xs text-gray-500 mt-2 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded">
+                📧 Development Mode: Form submissions will be simulated. Contact form will work properly when deployed to Netlify.
+              </div>
+            )}
           </form>
 
           <div className="mt-12 text-center">

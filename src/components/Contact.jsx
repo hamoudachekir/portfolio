@@ -19,108 +19,61 @@ export default function Contact() {
       position: 'top-right',
     });
 
-    // Get form values
-    const name = formData.name;
-    const email = formData.email;
-    const message = formData.message;
-
     try {
-      // Check if running locally
-      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      
-      if (isLocal) {
-        // Local development - simulate success
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        toast.success(`✅ Dev Mode: Form validated!\nName: ${name}\nEmail: ${email}\nMessage: ${message.substring(0, 50)}...`, {
-          duration: 6000,
-          position: 'top-right',
-          style: {
-            background: '#F59E0B',
-            color: 'white',
-            borderRadius: '12px',
-            padding: '16px',
-            maxWidth: '400px',
-          },
-        });
-        
-        setFormData({ name: '', email: '', message: '' });
-        setStatus({ 
-          type: 'success', 
-          message: 'Development mode - validated!' 
-        });
-      } else {
-        // Production - Submit to Netlify Forms
-        const formElement = e.target;
-        const formData = new FormData(formElement);
-        
-        const response = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString()
-        });
+      // EmailJS configuration
+      const serviceId = 'service_portfolio';
+      const templateId = 'template_portfolio';
+      const publicKey = 'YOUR_PUBLIC_KEY';
 
-        console.log('Form response status:', response.status);
-        console.log('Form response ok:', response.ok);
+      // Send email using EmailJS
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_email: 'hamoudachkir@yahoo.fr',
+      };
 
-        // Netlify returns 200 on success, but may redirect
-        if (response.ok || response.status === 200 || response.status === 303) {
-          // Success!
-          toast.success(`Thanks ${name}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
-            duration: 6000,
-            position: 'top-right',
-            style: {
-              background: '#10B981',
-              color: 'white',
-              borderRadius: '12px',
-              padding: '16px',
-              maxWidth: '400px',
-            },
-          });
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
-          // Reset form
-          setFormData({ name: '', email: '', message: '' });
-          setStatus({ 
-            type: 'success', 
-            message: 'Message sent successfully!' 
-          });
-        } else {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-      }
+      // Success!
+      toast.success(`Thanks ${formData.name}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
+        duration: 6000,
+        position: 'top-right',
+        style: {
+          background: '#10B981',
+          color: 'white',
+          borderRadius: '12px',
+          padding: '16px',
+          maxWidth: '400px',
+        },
+      });
+
+      // Reset form
+      setFormData({ name: '', email: '', message: '' });
+      setStatus({ 
+        type: 'success', 
+        message: 'Message sent successfully!' 
+      });
       
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error('EmailJS Error:', error);
       
-      // Mailto fallback for production
-      const mailtoLink = `mailto:hamoudachkir@yahoo.fr?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0D%0A%0D%0AFrom: ${encodeURIComponent(email)}`;
-      
-      toast.error(
-        <div>
-          <p className="font-semibold mb-2">Opening email client...</p>
-          <p className="text-sm">Your email app will open in a moment.</p>
-        </div>,
-        {
-          duration: 5000,
-          position: 'top-right',
-          style: {
-            background: '#F59E0B',
-            color: 'white',
-            borderRadius: '12px',
-            padding: '16px',
-            maxWidth: '400px',
-          },
-        }
-      );
-      
-      // Open mailto
-      setTimeout(() => {
-        window.location.href = mailtoLink;
-      }, 1500);
+      // Error notification
+      toast.error('Failed to send message. Please try again or contact me directly at hamoudachkir@yahoo.fr', {
+        duration: 8000,
+        position: 'top-right',
+        style: {
+          background: '#EF4444',
+          color: 'white',
+          borderRadius: '12px',
+          padding: '16px',
+          maxWidth: '400px',
+        },
+      });
       
       setStatus({ 
-        type: 'info', 
-        message: 'Opening your email client...' 
+        type: 'error', 
+        message: 'Failed to send message. Please try again.' 
       });
     } finally {
       toast.dismiss(loadingToast);
@@ -151,22 +104,9 @@ export default function Contact() {
 
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <form 
-            name="contact" 
-            method="POST" 
-            data-netlify="true" 
-            data-netlify-honeypot="bot-field"
-            action="/success"
             onSubmit={handleSubmit} 
             className="p-8 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl space-y-6"
           >
-            <input type="hidden" name="form-name" value="contact" />
-            
-            {/* Honeypot field for spam protection */}
-            <div style={{ display: 'none' }}>
-              <label>
-                Don't fill this out if you're human: <input name="bot-field" />
-              </label>
-            </div>
             
             {/* Status message */}
             {status.message && (

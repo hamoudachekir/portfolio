@@ -25,57 +25,14 @@ export default function Contact() {
     const message = formData.message;
 
     try {
-      // Encode form data for Netlify
-      const encode = (data) => {
-        return Object.keys(data)
-          .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-          .join('&');
-      };
-
-      // Submit to Netlify Forms
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({
-          'form-name': 'contact',
-          'name': name,
-          'email': email,
-          'message': message
-        })
-      });
-
-      // Check response
-      if (response.ok || response.status === 200) {
-        // Success!
-        toast.success(`Thanks ${name}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
-          duration: 6000,
-          position: 'top-right',
-          style: {
-            background: '#10B981',
-            color: 'white',
-            borderRadius: '12px',
-            padding: '16px',
-            maxWidth: '400px',
-          },
-        });
-
-        // Reset form
-        setFormData({ name: '', email: '', message: '' });
-        setStatus({ 
-          type: 'success', 
-          message: 'Message sent successfully!' 
-        });
-      } else {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      // Check if running locally
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
-    } catch (error) {
-      console.error('Error details:', error);
-      
-      // Check if we're in local development
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        // Local development - just show success
-        toast.success(`✅ Dev Mode: Form validated! Will work on production.\nName: ${name}\nEmail: ${email}`, {
+      if (isLocal) {
+        // Local development - simulate success
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        toast.success(`✅ Dev Mode: Form validated!\nName: ${name}\nEmail: ${email}\nMessage: ${message.substring(0, 50)}...`, {
           duration: 6000,
           position: 'top-right',
           style: {
@@ -93,42 +50,78 @@ export default function Contact() {
           message: 'Development mode - validated!' 
         });
       } else {
-        // Production error - provide mailto fallback
-        const mailtoLink = `mailto:hamoudachkir@yahoo.fr?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0D%0A%0D%0AFrom: ${encodeURIComponent(email)}`;
+        // Production - Submit to Netlify Forms
+        const formElement = e.target;
+        const formData = new FormData(formElement);
         
-        toast.error(
-          <div>
-            <p>Form submission issue detected. Opening email client as backup...</p>
-            <button 
-              onClick={() => window.location.href = mailtoLink}
-              className="mt-2 px-4 py-2 bg-white/20 rounded hover:bg-white/30 transition"
-            >
-              Open Email
-            </button>
-          </div>,
-          {
-            duration: 10000,
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        });
+
+        console.log('Form response status:', response.status);
+        console.log('Form response ok:', response.ok);
+
+        // Netlify returns 200 on success, but may redirect
+        if (response.ok || response.status === 200 || response.status === 303) {
+          // Success!
+          toast.success(`Thanks ${name}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
+            duration: 6000,
             position: 'top-right',
             style: {
-              background: '#EF4444',
+              background: '#10B981',
               color: 'white',
               borderRadius: '12px',
               padding: '16px',
               maxWidth: '400px',
             },
-          }
-        );
-        
-        // Also open mailto automatically
-        setTimeout(() => {
-          window.location.href = mailtoLink;
-        }, 2000);
-        
-        setStatus({ 
-          type: 'error', 
-          message: 'Please use the email client that opened.' 
-        });
+          });
+
+          // Reset form
+          setFormData({ name: '', email: '', message: '' });
+          setStatus({ 
+            type: 'success', 
+            message: 'Message sent successfully!' 
+          });
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
       }
+      
+    } catch (error) {
+      console.error('Form submission error:', error);
+      
+      // Mailto fallback for production
+      const mailtoLink = `mailto:hamoudachkir@yahoo.fr?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0D%0A%0D%0AFrom: ${encodeURIComponent(email)}`;
+      
+      toast.error(
+        <div>
+          <p className="font-semibold mb-2">Opening email client...</p>
+          <p className="text-sm">Your email app will open in a moment.</p>
+        </div>,
+        {
+          duration: 5000,
+          position: 'top-right',
+          style: {
+            background: '#F59E0B',
+            color: 'white',
+            borderRadius: '12px',
+            padding: '16px',
+            maxWidth: '400px',
+          },
+        }
+      );
+      
+      // Open mailto
+      setTimeout(() => {
+        window.location.href = mailtoLink;
+      }, 1500);
+      
+      setStatus({ 
+        type: 'info', 
+        message: 'Opening your email client...' 
+      });
     } finally {
       toast.dismiss(loadingToast);
       setIsLoading(false);
@@ -157,7 +150,15 @@ export default function Contact() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit} className="p-8 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl space-y-6">
+          <form 
+            name="contact" 
+            method="POST" 
+            data-netlify="true" 
+            data-netlify-honeypot="bot-field"
+            action="/success"
+            onSubmit={handleSubmit} 
+            className="p-8 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl space-y-6"
+          >
             <input type="hidden" name="form-name" value="contact" />
             
             {/* Honeypot field for spam protection */}

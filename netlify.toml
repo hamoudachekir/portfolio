@@ -9,3 +9,8 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+# Form handling with email notifications
+[[forms]]
+  [forms.contact]
+    fields = ["name", "email", "message"]

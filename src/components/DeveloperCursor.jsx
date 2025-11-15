@@ -34,8 +34,8 @@ const DeveloperCursor = () => {
 
   return (
     <>
-      {/* Hide default cursor */}
-      <style jsx>{`
+      {/* Hide default cursor using CSS-in-JS */}
+      <style>{`
         * {
           cursor: none !important;
         }

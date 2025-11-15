@@ -9,11 +9,14 @@ import Certifications from './components/Certifications'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import DeveloperCursor from './components/DeveloperCursor'
+import { Toaster } from 'react-hot-toast'
+import './index.css'
 
 function App() {
   return (
     <div className="min-h-screen bg-[#0a0a1f] text-white">
       <DeveloperCursor />
+      <Toaster />
       <Navbar />
       <Hero />
       <Overview />

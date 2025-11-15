@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Mail, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import emailjs from '@emailjs/browser';
+import toast from 'react-hot-toast';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -13,37 +14,69 @@ export default function Contact() {
     setIsLoading(true);
     setStatus({ type: '', message: '' });
 
+    // Show loading toast
+    const loadingToast = toast.loading('Sending your message...', {
+      position: 'top-right',
+    });
+
     try {
-      // Use Netlify Forms for seamless submission
-      const response = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          "form-name": "contact",
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-        }).toString(),
+      // Create FormData from the form
+      const formData = new FormData(e.target);
+      
+      // Submit to Netlify
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString(),
       });
 
       if (response.ok) {
-        // Reset form and show success
+        // Success notification
+        toast.success(`Thanks ${formData.get('name')}! Your message has been sent successfully. I'll get back to you soon! 🚀`, {
+          duration: 6000,
+          position: 'top-right',
+          style: {
+            background: '#10B981',
+            color: 'white',
+            borderRadius: '12px',
+            padding: '16px',
+            maxWidth: '400px',
+          },
+        });
+
+        // Reset form
         setFormData({ name: '', email: '', message: '' });
         setStatus({ 
           type: 'success', 
-          message: 'Message sent successfully! I\'ll get back to you soon.' 
+          message: 'Message sent successfully!' 
         });
       } else {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to send message');
       }
       
     } catch (error) {
       console.error('Error sending message:', error);
+      
+      // Error notification
+      toast.error('Failed to send message. Please try again or contact me directly at hamoudachkir@yahoo.fr', {
+        duration: 8000,
+        position: 'top-right',
+        style: {
+          background: '#EF4444',
+          color: 'white',
+          borderRadius: '12px',
+          padding: '16px',
+          maxWidth: '400px',
+        },
+      });
+      
       setStatus({ 
         type: 'error', 
-        message: 'Failed to send message. Please try again or contact me directly.' 
+        message: 'Failed to send message. Please try again.' 
       });
     } finally {
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
       setIsLoading(false);
     }
   };

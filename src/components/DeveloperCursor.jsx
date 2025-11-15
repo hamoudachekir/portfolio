@@ -5,8 +5,20 @@ const DeveloperCursor = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isClicking, setIsClicking] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    // Check if device is mobile/tablet
+    const checkIfMobile = () => {
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth < 1024; // Less than 1024px (tablet/mobile)
+      setIsMobile(isTouchDevice || isSmallScreen);
+    };
+
+    // Check on mount and on resize
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+
     const updateMousePosition = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
     }
@@ -25,6 +37,7 @@ const DeveloperCursor = () => {
     document.addEventListener('mouseover', handleMouseOver)
 
     return () => {
+      window.removeEventListener('resize', checkIfMobile)
       document.removeEventListener('mousemove', updateMousePosition)
       document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('mouseup', handleMouseUp)
@@ -32,12 +45,19 @@ const DeveloperCursor = () => {
     }
   }, [])
 
+  // Don't render custom cursor on mobile/tablet
+  if (isMobile) {
+    return null;
+  }
+
   return (
     <>
-      {/* Hide default cursor using CSS-in-JS */}
+      {/* Hide default cursor using CSS-in-JS - only on desktop */}
       <style>{`
-        * {
-          cursor: none !important;
+        @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+          * {
+            cursor: none !important;
+          }
         }
       `}</style>
 

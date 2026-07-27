@@ -1,23 +1,24 @@
 import { Github, Linkedin } from 'lucide-react'
 import { profile } from '../data/profile'
+import CvDownload from './CvDownload'
 
 export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-paper-line bg-ink py-10 text-paper">
+    <footer className="border-t border-code-line bg-code-bg py-10">
       <div className="container-page flex flex-col items-center justify-between gap-6 md:flex-row">
-        <p className="text-sm text-paper/60">
-          © {year} <span className="font-semibold text-paper">{profile.name}</span>
+        <p className="font-mono text-xs text-code-dim">
+          © {year} <span className="text-code-fg">{profile.name}</span>
         </p>
-        <p className="font-mono text-xs text-paper/40">{profile.title}</p>
+        <CvDownload variant="compact" />
         <div className="flex items-center gap-4">
           <a
             href={profile.github}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="text-paper/60 transition hover:text-signal-bright"
+            className="text-code-dim transition hover:text-sky"
           >
             <Github size={18} />
           </a>
@@ -26,7 +27,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="text-paper/60 transition hover:text-signal-bright"
+            className="text-code-dim transition hover:text-sky"
           >
             <Linkedin size={18} />
           </a>

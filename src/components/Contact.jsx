@@ -38,7 +38,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="section-pad border-t border-paper-line bg-paper">
+    <section id="contact" className="section-pad border-t border-code-line bg-[#0D1219]">
       <div className="container-page max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -46,10 +46,10 @@ export default function Contact() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <p className="eyebrow">Contact</p>
+          <p className="eyebrow">contact.open()</p>
           <h2 className="display mt-3 text-3xl sm:text-4xl md:text-5xl">Let’s talk</h2>
-          <p className="mt-4 text-ink-soft">
-            Open to internships, junior roles, and collaboration in Tunis or remote.
+          <p className="mt-4 text-code-mute">
+            Open to junior / AI engineering roles in Tunis or remote.
           </p>
         </motion.div>
 
@@ -60,16 +60,14 @@ export default function Contact() {
           onSubmit={onSubmit}
           name="contact"
           data-netlify="true"
-          className="surface mt-12 space-y-5 p-6 md:p-8"
+          className="terminal mt-12 space-y-5 p-6 md:p-8"
         >
           <input type="hidden" name="form-name" value="contact" />
 
           {status.message && (
             <div
               className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
-                status.type === 'success'
-                  ? 'bg-signal/10 text-signal-deep'
-                  : 'bg-ember/10 text-ember'
+                status.type === 'success' ? 'bg-mint/10 text-mint' : 'bg-ember/10 text-ember'
               }`}
             >
               {status.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
@@ -77,40 +75,27 @@ export default function Contact() {
             </div>
           )}
 
-          <div>
-            <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-ink">
-              Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              required
-              value={formData.name}
-              onChange={onChange}
-              className="w-full rounded-md border border-paper-line bg-paper px-4 py-3 text-ink outline-none ring-signal focus:ring-2"
-              placeholder="Your name"
-            />
-          </div>
+          {['name', 'email'].map((field) => (
+            <div key={field}>
+              <label htmlFor={field} className="mb-1.5 block font-mono text-xs text-code-mute">
+                {field}
+              </label>
+              <input
+                id={field}
+                name={field}
+                type={field === 'email' ? 'email' : 'text'}
+                required
+                value={formData[field]}
+                onChange={onChange}
+                className="w-full rounded-md border border-white/10 bg-code-bg px-4 py-3 font-mono text-sm text-code-fg outline-none ring-sky focus:ring-2"
+                placeholder={field === 'email' ? 'you@company.com' : 'Your name'}
+              />
+            </div>
+          ))}
 
           <div>
-            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-ink">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={formData.email}
-              onChange={onChange}
-              className="w-full rounded-md border border-paper-line bg-paper px-4 py-3 text-ink outline-none ring-signal focus:ring-2"
-              placeholder="you@company.com"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink">
-              Message
+            <label htmlFor="message" className="mb-1.5 block font-mono text-xs text-code-mute">
+              message
             </label>
             <textarea
               id="message"
@@ -119,7 +104,7 @@ export default function Contact() {
               rows={5}
               value={formData.message}
               onChange={onChange}
-              className="w-full resize-none rounded-md border border-paper-line bg-paper px-4 py-3 text-ink outline-none ring-signal focus:ring-2"
+              className="w-full resize-none rounded-md border border-white/10 bg-code-bg px-4 py-3 font-mono text-sm text-code-fg outline-none ring-sky focus:ring-2"
               placeholder="Role, timing, or a quick hello…"
             />
           </div>
@@ -130,9 +115,12 @@ export default function Contact() {
           </button>
         </motion.form>
 
-        <p className="mt-8 text-center text-sm text-ink-mute">
-          Or write directly:{' '}
-          <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-1 font-medium text-signal-deep hover:underline">
+        <p className="mt-8 text-center font-mono text-sm text-code-dim">
+          Or write:{' '}
+          <a
+            href={`mailto:${profile.email}`}
+            className="inline-flex items-center gap-1 text-sky hover:underline"
+          >
             <Mail size={14} />
             {profile.email}
           </a>

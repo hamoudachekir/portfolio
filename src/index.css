@@ -8,11 +8,11 @@
   }
 
   body {
-    @apply bg-paper text-ink font-body antialiased overflow-x-hidden;
+    @apply bg-code-bg text-code-fg font-body antialiased overflow-x-hidden;
   }
 
   ::selection {
-    @apply bg-signal/25 text-ink;
+    @apply bg-sky/30 text-white;
   }
 }
 
@@ -26,23 +26,35 @@
   }
 
   .eyebrow {
-    @apply font-mono text-xs uppercase tracking-[0.22em] text-signal;
+    @apply font-mono text-xs uppercase tracking-[0.22em] text-mint;
   }
 
   .display {
-    @apply font-display font-bold tracking-tight text-ink;
+    @apply font-display font-bold tracking-tight text-white;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-semibold text-paper transition hover:bg-signal-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal;
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-sky px-6 py-3 text-sm font-semibold text-code-bg transition hover:bg-sky-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border border-ink/15 bg-paper-elev px-6 py-3 text-sm font-semibold text-ink transition hover:border-signal hover:text-signal-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-code-fg transition hover:border-mint/50 hover:text-mint focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mint;
   }
 
   .surface {
-    @apply rounded-2xl border border-paper-line bg-paper-elev shadow-lift;
+    @apply rounded-xl border border-code-line bg-code-panel shadow-lift;
+  }
+
+  .terminal {
+    @apply rounded-xl border border-code-line bg-[#0D1117] font-mono text-sm shadow-glow;
+  }
+
+  .skill-bar {
+    @apply h-1.5 rounded-full bg-white/10 overflow-hidden;
+  }
+
+  .skill-fill {
+    @apply h-full rounded-full bg-gradient-to-r from-sky to-mint;
   }
 }
 
@@ -50,14 +62,14 @@
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #F7F4EE;
+  background: #0A0E14;
 }
 ::-webkit-scrollbar-thumb {
-  background: #94A3B8;
+  background: #374151;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #0F766E;
+  background: #38BDF8;
 }
 
 @media (prefers-reduced-motion: reduce) {

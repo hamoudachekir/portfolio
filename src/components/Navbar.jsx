@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
+import CvDownload from './CvDownload'
 
 const navItems = [
   { name: 'Work', href: '#career' },
   { name: 'Projects', href: '#projects' },
-  { name: 'Stack', href: '#technologies' },
+  { name: 'Skills', href: '#technologies' },
   { name: 'Education', href: '#education' },
   { name: 'Contact', href: '#contact' },
 ]
@@ -30,16 +31,16 @@ export default function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all ${
-        scrolled ? 'border-b border-paper-line bg-paper/90 backdrop-blur-md' : 'bg-transparent'
+        scrolled ? 'border-b border-white/10 bg-code-bg/90 backdrop-blur-md' : 'bg-transparent'
       }`}
     >
       <div className="container-page flex h-16 items-center justify-between">
         <a
           href="#home"
           onClick={(e) => go(e, '#home')}
-          className="font-display text-lg font-bold tracking-tight text-ink"
+          className="font-mono text-sm font-semibold tracking-tight text-white"
         >
-          Hamouda<span className="text-signal">.</span>
+          <span className="text-sky">~/</span>hamouda
         </a>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -48,19 +49,19 @@ export default function Navbar() {
               key={item.href}
               href={item.href}
               onClick={(e) => go(e, item.href)}
-              className="rounded-md px-3 py-2 text-sm font-medium text-ink-soft transition hover:text-signal-deep"
+              className="rounded-md px-3 py-2 font-mono text-xs text-code-mute transition hover:text-sky"
             >
               {item.name}
             </a>
           ))}
-          <a href="#contact" onClick={(e) => go(e, '#contact')} className="btn-primary ml-3 !py-2 !px-4 text-xs">
-            Hire me
-          </a>
+          <div className="ml-2">
+            <CvDownload variant="compact" />
+          </div>
         </nav>
 
         <button
           type="button"
-          className="rounded-md p-2 text-ink md:hidden"
+          className="rounded-md p-2 text-code-fg md:hidden"
           aria-label={open ? 'Close menu' : 'Open menu'}
           onClick={() => setOpen((v) => !v)}
         >
@@ -69,18 +70,21 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t border-paper-line bg-paper md:hidden">
+        <div className="border-t border-white/10 bg-code-bg md:hidden">
           <div className="container-page flex flex-col gap-1 py-3">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={(e) => go(e, item.href)}
-                className="rounded-md px-3 py-3 text-sm font-medium text-ink-soft"
+                className="rounded-md px-3 py-3 font-mono text-sm text-code-mute"
               >
                 {item.name}
               </a>
             ))}
+            <div className="px-3 py-2">
+              <CvDownload variant="full" />
+            </div>
           </div>
         </div>
       )}

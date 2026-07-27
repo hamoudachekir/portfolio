@@ -13,14 +13,15 @@ import './index.css'
 
 function App() {
   return (
-    <div className="min-h-screen bg-paper text-ink">
+    <div className="min-h-screen bg-code-bg text-code-fg">
       <Toaster
         toastOptions={{
           style: {
-            background: '#0F172A',
-            color: '#F7F4EE',
+            background: '#111827',
+            color: '#E5E7EB',
             borderRadius: '10px',
-            fontFamily: 'Source Sans 3, sans-serif',
+            border: '1px solid #1F2937',
+            fontFamily: 'IBM Plex Mono, monospace',
           },
         }}
       />

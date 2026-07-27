@@ -49,10 +49,51 @@ export const technologies = [
   },
 ];
 
+/** Skill matrix for coding / AI profile (honest levels 1–5). */
+export const skillMatrix = [
+  {
+    group: 'Engineering',
+    color: 'sky',
+    skills: [
+      { name: 'Python / FastAPI', level: 4 },
+      { name: 'React / JS', level: 4 },
+      { name: 'Node / Express', level: 3 },
+      { name: 'REST APIs', level: 4 },
+      { name: 'SQL (Postgres / MySQL)', level: 3 },
+      { name: 'MongoDB', level: 4 },
+    ],
+  },
+  {
+    group: 'AI systems',
+    color: 'mint',
+    skills: [
+      { name: 'LLM agents', level: 4 },
+      { name: 'LangGraph / LangChain', level: 4 },
+      { name: 'RAG & grounding', level: 3 },
+      { name: 'Structured outputs', level: 4 },
+      { name: 'MCP-style gateways', level: 3 },
+      { name: 'Vision (YOLO / VLM)', level: 3 },
+    ],
+  },
+  {
+    group: 'Delivery',
+    color: 'amber',
+    skills: [
+      { name: 'Docker', level: 4 },
+      { name: 'Git / GitLab CI', level: 4 },
+      { name: 'Microservices design', level: 4 },
+      { name: 'Agile / Scrum', level: 4 },
+      { name: 'AWS Foundations', level: 2 },
+      { name: 'WebRTC', level: 3 },
+    ],
+  },
+];
+
 export const experiences = [
   {
     title: 'Software Engineer — Final-Year Project (PFE)',
     company: 'Talan',
+    logo: '/logos/talan.png',
     period: 'Feb 2026 – Aug 2026',
     location: 'Tunis, Tunisia',
     achievements: [

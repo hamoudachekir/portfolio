@@ -4,36 +4,57 @@ export default {
   theme: {
     extend: {
       colors: {
+        code: {
+          bg: '#0A0E14',
+          panel: '#111827',
+          line: '#1F2937',
+          fg: '#E5E7EB',
+          mute: '#9CA3AF',
+          dim: '#6B7280',
+        },
+        sky: {
+          DEFAULT: '#38BDF8',
+          dim: '#0EA5E9',
+        },
+        mint: {
+          DEFAULT: '#2DD4BF',
+          dim: '#14B8A6',
+        },
+        amber: {
+          DEFAULT: '#FBBF24',
+          dim: '#F59E0B',
+        },
         ink: {
-          DEFAULT: '#0F172A',
-          soft: '#334155',
-          mute: '#64748B',
+          DEFAULT: '#E5E7EB',
+          soft: '#D1D5DB',
+          mute: '#9CA3AF',
         },
         paper: {
-          DEFAULT: '#F7F4EE',
-          elev: '#FFFFFF',
-          line: '#E7E2D8',
+          DEFAULT: '#0A0E14',
+          elev: '#111827',
+          line: '#1F2937',
         },
         signal: {
-          DEFAULT: '#0F766E',
-          bright: '#14B8A6',
-          deep: '#115E59',
+          DEFAULT: '#2DD4BF',
+          bright: '#5EEAD4',
+          deep: '#14B8A6',
         },
         ember: {
-          DEFAULT: '#C2410C',
-          soft: '#FB923C',
+          DEFAULT: '#F87171',
+          soft: '#FCA5A5',
         },
       },
       fontFamily: {
-        display: ['"Syne"', 'system-ui', 'sans-serif'],
-        body: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        body: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        lift: '0 18px 40px -24px rgba(15, 23, 42, 0.35)',
+        lift: '0 24px 48px -28px rgba(0, 0, 0, 0.65)',
+        glow: '0 0 0 1px rgba(56,189,248,0.25), 0 0 40px -12px rgba(45,212,191,0.35)',
       },
       backgroundImage: {
-        mesh: 'radial-gradient(ellipse 80% 50% at 20% 10%, rgba(20,184,166,0.18), transparent), radial-gradient(ellipse 60% 40% at 90% 20%, rgba(194,65,12,0.10), transparent), linear-gradient(180deg, #F7F4EE 0%, #EEF2F0 100%)',
+        mesh: 'radial-gradient(ellipse 70% 50% at 15% 0%, rgba(56,189,248,0.12), transparent), radial-gradient(ellipse 50% 40% at 90% 10%, rgba(45,212,191,0.10), transparent), linear-gradient(180deg, #0A0E14 0%, #0D1219 100%)',
       },
     },
   },

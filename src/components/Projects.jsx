@@ -1,14 +1,19 @@
 import { motion } from 'framer-motion'
 import { Github } from 'lucide-react'
 import { projects } from '../data/profile'
+import Aurora from './Aurora/Aurora'
 
 export default function Projects() {
   const featured = projects.find((p) => p.featured)
   const rest = projects.filter((p) => !p.featured)
 
   return (
-    <section id="projects" className="section-pad border-t border-code-line bg-code-bg">
-      <div className="container-page">
+    <section id="projects" className="section-pad relative overflow-hidden border-t border-code-line bg-code-bg">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 opacity-40">
+        <Aurora colorStops={['#22D3EE', '#818CF8', '#34D399']} amplitude={0.9} blend={0.65} speed={0.6} />
+      </div>
+
+      <div className="container-page relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -29,7 +34,7 @@ export default function Projects() {
             className="surface mt-12 overflow-hidden"
           >
             <div className="grid md:grid-cols-[1.1fr_0.9fr]">
-              <div className="border-b border-code-line bg-[#0D1117] p-8 md:border-b-0 md:border-r md:p-10">
+              <div className="border-b border-code-line bg-[#0D1117]/90 p-8 md:border-b-0 md:border-r md:p-10">
                 <span className="inline-flex rounded border border-mint/30 bg-mint/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-mint">
                   {featured.badge}
                 </span>

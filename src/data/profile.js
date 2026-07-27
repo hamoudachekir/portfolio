@@ -13,7 +13,7 @@ export const profile = {
   tagline:
     'I turn hiring and product workflows into reliable web systems — microservices, LLM agents, and clean APIs.',
   summary:
-    'Engineering student at ESPRIT (TWIN). At Talan I designed and shipped NextHire, an AI-first ATS of 16 microservices (React, Node, Python FastAPI, MongoDB, Docker). Comfortable with Agile delivery and mixed stakeholders.',
+    'Software engineer (ESPRIT, TWIN) focused on delivery: I turn business needs into reliable web products using full-stack development, applied AI and microservices architectures. Comfortable in agile teams and with mixed stakeholders (tech, business, leadership), I prioritise quality, measurability and clean production releases. Recent proof point: at Talan, designed and shipped NextHire, an AI-first ATS of 16 microservices (React, Node/Express, Python FastAPI, MongoDB, Docker).',
 };
 
 export const focusAreas = [

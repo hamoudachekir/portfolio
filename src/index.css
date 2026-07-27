@@ -42,11 +42,11 @@
   }
 
   .surface {
-    @apply rounded-xl border border-code-line bg-code-panel shadow-lift;
+    @apply rounded-xl border border-white/10 bg-code-panel/80 shadow-lift backdrop-blur-sm;
   }
 
   .terminal {
-    @apply rounded-xl border border-code-line bg-[#0D1117] font-mono text-sm shadow-glow;
+    @apply rounded-xl border border-white/10 bg-[#0D1117]/75 font-mono text-sm shadow-glow;
   }
 
   .skill-bar {

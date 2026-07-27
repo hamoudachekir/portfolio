@@ -1,218 +1,143 @@
-import { motion } from 'framer-motion';
-import { Mail, Send, CheckCircle, AlertCircle } from 'lucide-react';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
-import Earth from './Earth.jsx';
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Mail, Send, AlertCircle, CheckCircle } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { profile } from '../data/profile'
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState({ type: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState({ type: '', message: '' })
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setStatus({ type: '', message: '' });
+  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value })
 
-    const loadingToast = toast.loading('Sending your message...', {
-      position: 'top-right',
-    });
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setStatus({ type: '', message: '' })
+    const toastId = toast.loading('Sending…')
 
     try {
-      // --- Netlify Forms Submission ---
-      const formName = "contact";
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ 'form-name': 'contact', ...formData }).toString(),
+      })
+      if (!res.ok) throw new Error(`Status ${res.status}`)
 
-      const res = await fetch("/", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          "form-name": formName,
-          ...formData,
-        }).toString(),
-      });
-
-      if (!res.ok) {
-        throw new Error(`Netlify submission failed: ${res.status}`);
-      }
-
-      toast.success(
-        `Thanks ${formData.name}! Your message has been sent successfully. I'll get back to you soon! 🚀`,
-        {
-          duration: 6000,
-          position: "top-right",
-          style: {
-            background: "#10B981",
-            color: "white",
-            borderRadius: "12px",
-            padding: "16px",
-            maxWidth: "400px",
-          },
-        }
-      );
-
-      setFormData({ name: "", email: "", message: "" });
-      setStatus({ type: "success", message: "Message sent successfully!" });
-
-    } catch (error) {
-      console.error("Contact form submit error:", error);
-
-      toast.error(
-        "Failed to send message. Please try again or contact me directly at hamoudachkir@yahoo.fr",
-        {
-          duration: 8000,
-          position: "top-right",
-          style: {
-            background: "#EF4444",
-            color: "white",
-            borderRadius: "12px",
-            padding: "16px",
-            maxWidth: "400px",
-          },
-        }
-      );
-
-      setStatus({ type: "error", message: "Failed to send message. Please try again." });
+      toast.success(`Thanks ${formData.name} — message sent.`)
+      setFormData({ name: '', email: '', message: '' })
+      setStatus({ type: 'success', message: 'Message sent successfully.' })
+    } catch {
+      toast.error(`Could not send. Email me at ${profile.email}`)
+      setStatus({ type: 'error', message: 'Send failed. Use email instead.' })
     } finally {
-      toast.dismiss(loadingToast);
-      setIsLoading(false);
+      toast.dismiss(toastId)
+      setLoading(false)
     }
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  }
 
   return (
-    <section id="contact" className="relative py-32 bg-[#0a0a1f] overflow-hidden">
-      <Earth />
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Header */}
+    <section id="contact" className="section-pad border-t border-paper-line bg-paper">
+      <div className="container-page max-w-3xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center"
         >
-          <span className="text-purple-400 font-semibold text-sm uppercase tracking-wider">
-            Get In Touch
-          </span>
-          <h2 className="text-5xl md:text-6xl font-bold mt-4 mb-6">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Contact Me.
-            </span>
-          </h2>
+          <p className="eyebrow">Contact</p>
+          <h2 className="display mt-3 text-3xl sm:text-4xl md:text-5xl">Let’s talk</h2>
+          <p className="mt-4 text-ink-soft">
+            Open to internships, junior roles, and collaboration in Tunis or remote.
+          </p>
         </motion.div>
 
-        {/* Form */}
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          
-          <form
-            onSubmit={handleSubmit}
-            name="contact"
-            data-netlify="true"
-            className="p-8 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl space-y-6"
-          >
-            {/* Hidden input required by Netlify */}
-            <input type="hidden" name="form-name" value="contact" />
+        <motion.form
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          onSubmit={onSubmit}
+          name="contact"
+          data-netlify="true"
+          className="surface mt-12 space-y-5 p-6 md:p-8"
+        >
+          <input type="hidden" name="form-name" value="contact" />
 
-            {/* Status message */}
-            {status.message && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-lg flex items-center gap-3 ${
-                  status.type === "success"
-                    ? "bg-green-500/10 border border-green-500/20 text-green-400"
-                    : "bg-red-500/10 border border-red-500/20 text-red-400"
-                }`}
-              >
-                {status.type === "success" ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
-                <span className="text-sm">{status.message}</span>
-              </motion.div>
-            )}
-
-            {/* Name */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                Your Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-white placeholder-gray-500"
-                placeholder="John Doe"
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-white placeholder-gray-500"
-                placeholder="john@example.com"
-              />
-            </div>
-
-            {/* Message */}
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                required
-                value={formData.message}
-                onChange={handleChange}
-                rows="6"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none resize-none text-white placeholder-gray-500"
-                placeholder="Your message..."
-              ></textarea>
-            </div>
-
-            {/* Submit Button */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              disabled={isLoading}
-              className={`w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg font-semibold text-white hover:shadow-2xl hover:shadow-purple-500/50 flex items-center justify-center gap-2 transition-opacity ${
-                isLoading ? "opacity-50 cursor-not-allowed" : ""
+          {status.message && (
+            <div
+              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
+                status.type === 'success'
+                  ? 'bg-signal/10 text-signal-deep'
+                  : 'bg-ember/10 text-ember'
               }`}
             >
-              <Send size={20} />
-              {isLoading ? "Sending Message..." : "Send Message"}
-            </motion.button>
-          </form>
+              {status.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
+              {status.message}
+            </div>
+          )}
 
-          {/* Email Contact */}
-          <div className="mt-12 text-center">
-            <p className="text-gray-400 mb-4">Or reach me at:</p>
-            <a
-              href="mailto:hamoudachkir@yahoo.fr"
-              className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300"
-            >
-              <Mail size={20} />
-              <span className="font-medium">hamoudachkir@yahoo.fr</span>
-            </a>
+          <div>
+            <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-ink">
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              required
+              value={formData.name}
+              onChange={onChange}
+              className="w-full rounded-md border border-paper-line bg-paper px-4 py-3 text-ink outline-none ring-signal focus:ring-2"
+              placeholder="Your name"
+            />
           </div>
-        </motion.div>
+
+          <div>
+            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-ink">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              value={formData.email}
+              onChange={onChange}
+              className="w-full rounded-md border border-paper-line bg-paper px-4 py-3 text-ink outline-none ring-signal focus:ring-2"
+              placeholder="you@company.com"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink">
+              Message
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows={5}
+              value={formData.message}
+              onChange={onChange}
+              className="w-full resize-none rounded-md border border-paper-line bg-paper px-4 py-3 text-ink outline-none ring-signal focus:ring-2"
+              placeholder="Role, timing, or a quick hello…"
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">
+            <Send size={16} />
+            {loading ? 'Sending…' : 'Send message'}
+          </button>
+        </motion.form>
+
+        <p className="mt-8 text-center text-sm text-ink-mute">
+          Or write directly:{' '}
+          <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-1 font-medium text-signal-deep hover:underline">
+            <Mail size={14} />
+            {profile.email}
+          </a>
+        </p>
       </div>
     </section>
-  );
+  )
 }

@@ -1,63 +1,37 @@
-import { Heart, Github, Linkedin } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Github, Linkedin } from 'lucide-react'
+import { profile } from '../data/profile'
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear()
 
   return (
-    <footer className="relative bg-[#0a0a1f] border-t border-white/10 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          {/* Left */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center md:text-left"
+    <footer className="border-t border-paper-line bg-ink py-10 text-paper">
+      <div className="container-page flex flex-col items-center justify-between gap-6 md:flex-row">
+        <p className="text-sm text-paper/60">
+          © {year} <span className="font-semibold text-paper">{profile.name}</span>
+        </p>
+        <p className="font-mono text-xs text-paper/40">{profile.title}</p>
+        <div className="flex items-center gap-4">
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            className="text-paper/60 transition hover:text-signal-bright"
           >
-            <p className="text-gray-400 text-sm">
-              © {currentYear} <span className="text-purple-400 font-semibold">Hamouda</span>. All rights reserved.
-            </p>
-          </motion.div>
-
-          {/* Center */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-2 text-gray-400 text-sm"
+            <Github size={18} />
+          </a>
+          <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            className="text-paper/60 transition hover:text-signal-bright"
           >
-            <span>Crafted with</span>
-            <Heart size={16} className="text-red-500 fill-current animate-pulse" />
-            <span>using React + Vite</span>
-          </motion.div>
-
-          {/* Right - Social Links */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-4"
-          >
-            <a
-              href="https://github.com/hamoudachekir"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              <Github size={20} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/hamouda-chekir-5053572b4"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors"
-            >
-              <Linkedin size={20} />
-            </a>
-          </motion.div>
+            <Linkedin size={18} />
+          </a>
         </div>
       </div>
     </footer>
-  );
+  )
 }

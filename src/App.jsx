@@ -8,24 +8,33 @@ import Education from './components/Education'
 import Certifications from './components/Certifications'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
-import DeveloperCursor from './components/DeveloperCursor'
 import { Toaster } from 'react-hot-toast'
 import './index.css'
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#0a0a1f] text-white">
-      <DeveloperCursor />
-      <Toaster />
+    <div className="min-h-screen bg-paper text-ink">
+      <Toaster
+        toastOptions={{
+          style: {
+            background: '#0F172A',
+            color: '#F7F4EE',
+            borderRadius: '10px',
+            fontFamily: 'Source Sans 3, sans-serif',
+          },
+        }}
+      />
       <Navbar />
-      <Hero />
-      <Overview />
-      <Technologies />
-      <CareerHighlights />
-      <Projects />
-      <Education />
-      <Certifications />
-      <Contact />
+      <main>
+        <Hero />
+        <Overview />
+        <CareerHighlights />
+        <Projects />
+        <Technologies />
+        <Education />
+        <Certifications />
+        <Contact />
+      </main>
       <Footer />
     </div>
   )
